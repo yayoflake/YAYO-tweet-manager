@@ -1,0 +1,1883 @@
+﻿body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  /* ・誤攵・ｰ・ ・川ｲｴ ・､增ｬ・､ ・ｩ・ */
+}
+
+#appRoot {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+}
+
+#mainArea {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.main-panel-sticky-header {
+  position: sticky;
+  top: -16px;
+  margin: -16px -16px 12px -16px;
+  padding: 12px 16px;
+  background: #fff;
+  z-index: 100;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.row>* {
+  margin: 4px 0;
+}
+
+input[type="text"],
+input[type="number"] {
+  padding: 6px 8px;
+}
+
+input[type="text"] {
+  width: 200px;
+  max-width: 100%;
+}
+
+input[type="number"] {
+  width: 100px;
+}
+
+button {
+  padding: 5px 12px;
+  cursor: pointer;
+  border: 1px solid #c8c8c8;
+  border-radius: 6px;
+  background: #fafafa;
+  color: #333;
+  font-size: 13px;
+  font-family: inherit;
+  line-height: 1.4;
+  white-space: nowrap;
+  transition: background 0.12s, border-color 0.12s, box-shadow 0.12s;
+}
+
+button:hover:not(:disabled) {
+  background: #f0f2f5;
+  border-color: #aaa;
+}
+
+button:active:not(:disabled) {
+  background: #e8ebf0;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ・ｼ・・・｡・・・・款 (・・圸, ・ｴ・ｴ・ｴ・ｰ ・ｱ) */
+.btn-primary {
+  background: #1a73e8;
+  border-color: #1a73e8;
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #1765cc;
+  border-color: #1557b0;
+}
+
+.btn-primary:active:not(:disabled) {
+  background: #1450a0;
+}
+
+/* ・ｱ・ｵ ・｡・・・・款 (・ｵ・ｬ ・・｣・・ｱ) */
+.btn-success {
+  background: #34a853;
+  border-color: #34a853;
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-success:hover:not(:disabled) {
+  background: #2d9248;
+  border-color: #267c3e;
+}
+
+.btn-success:active:not(:disabled) {
+  background: #237038;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #fff0f2;
+  border-color: #d47070;
+}
+
+
+/* 보조 버튼 스타일 (회색) */
+.btn-secondary {
+  background: #838d99;
+  border-color: #838d99;
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #727d8a;
+  border-color: #727d8a;
+}
+
+.btn-secondary:active:not(:disabled) {
+  background: #626c78;
+}
+
+/* 어두운 버튼 스타일 (#2b3a4a) */
+.btn-dark {
+  background: #2b3a4a;
+  border-color: #2b3a4a;
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-dark:hover:not(:disabled) {
+  background: #24303d;
+  border-color: #1d2631;
+}
+
+.btn-dark:active:not(:disabled) {
+  background: #1a222c;
+}
+
+/* 중립적인 회색 버튼 스타일 (#6c757d) */
+.btn-gray {
+  background: #6c757d;
+  border-color: #6c757d;
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-gray:hover:not(:disabled) {
+  background: #5a6268;
+  border-color: #545b62;
+}
+
+.btn-gray:active:not(:disabled) {
+  background: #4e555b;
+}
+
+/* 笏笏 ・寀ｸ・ｬ寀ｰ 增ｴ・們侃 笏笏 */
+.w-100 {
+  width: 100% !important;
+}
+
+.mb-1 {
+  margin-bottom: 6px !important;
+}
+
+.mb-2 {
+  margin-bottom: 10px !important;
+}
+
+.mb-3 {
+  margin-bottom: 16px !important;
+}
+
+.mt-1 {
+  margin-top: 6px !important;
+}
+
+.mt-2 {
+  margin-top: 10px !important;
+}
+
+/* 내보내기 매니저 전용 범용 textarea 스타일 */
+.em-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fafafa;
+  font-family: 'Consolas', 'Monaco', 'Lucida Console', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  resize: none;
+  min-height: 0;
+  margin-top: 4px;
+  color: #333;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.em-textarea:focus {
+  outline: none;
+  border-color: #1a73e8;
+  background-color: #fff;
+  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.1);
+}
+
+.em-textarea[readonly] {
+  background-color: #f8f9fa;
+  cursor: default;
+}
+
+.mt-3 {
+  margin-top: 16px !important;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+/* 笏笏 ・ｨ・ｬ ・ｵ奝ｵ ・､夋・ｼ (・肥圸 ・ｴ尞ｬ・醐敢) 笏笏 */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.show {
+  display: flex !important;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #ddd;
+  flex-shrink: 0;
+}
+
+.modal-header h3,
+.modal-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.12s;
+}
+
+.modal-close-btn:hover {
+  color: #333;
+}
+
+.modal-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid #ddd;
+  flex-shrink: 0;
+}
+
+/* 笏笏 ・簿ｳｴ ・壱ざ ・菩侃 笏笏 */
+.info-box {
+  padding: 12px 16px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  vertical-align: top;
+}
+
+th {
+  background: #f5f5f5;
+}
+
+.muted {
+  color: #777;
+  font-size: 12px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+label.pill {
+  cursor: pointer;
+  user-select: none;
+}
+
+label.pill input {
+  cursor: pointer;
+}
+
+label.pill:has(input:disabled) {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.danger {
+  color: #b00020;
+}
+
+.btn-danger {
+  border-color: #f0b8b8;
+  color: #b00020;
+}
+
+.tweetWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tweetDate {
+  color: #888;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0 4px;
+  /* ・肥・ ・・・護垈 ・・ｲｩ */
+}
+
+.tweetIndex {
+  color: #000;
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+.tweetText {
+  font-size: 14px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.tweetMetrics {
+  font-size: 13px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #666;
+  line-height: 1;
+}
+
+.metric-link {
+  cursor: pointer;
+  transition: opacity 0.1s;
+}
+
+.metric-link:hover {
+  opacity: 0.7;
+}
+
+.metric-link svg {
+  display: block;
+}
+
+.metric-link-icon {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.metric-link-icon svg {
+  display: block;
+}
+
+.tweetId {
+  color: #aaa;
+  font-size: 11px;
+}
+
+.tweetIdLabel {
+  font-weight: 700;
+  color: #000;
+}
+
+.metric {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.tags {
+  display: inline-flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  transition: background-color 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  font-size: 12px;
+  color: #444;
+  background: #fafafa;
+}
+
+.mediaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.mediaGrid img,
+.mediaGrid video {
+  width: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+}
+
+.pager {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pager button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pageNum {
+  min-width: 90px;
+  text-align: center;
+}
+
+/* ・ｸ・ｩ ・ｸ・ｬ・ｴ・ｰ */
+.quotePreview {
+  margin-top: 6px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+  font-size: 13px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.quotePreviewTitle {
+  font-size: 11px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+/* ・滝ｸｰ-寬ｼ・俾ｸｰ summary ・・款 ・尖ｌ */
+details>summary {
+  cursor: pointer;
+}
+
+/* 夋懋ｷｸ ・ｰ・ｸ */
+.tag {
+  user-select: none;
+}
+
+/* 增ｴ・ｭ ・・･﨑・夋懋ｷｸ ・ｵ奝ｵ ・､夋・ｼ */
+.tagClickable {
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.tagClickableMedia {
+  cursor: pointer;
+}
+
+.tagClickable:hover {
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+}
+
+.tagClickable:active {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* 夋懋ｷｸ・・・餓メ - ・罹｡・嶹菩共德・・､・ｴ・・*/
+.tagQuoteMine {
+  /* ・ｴ 孖ｸ・・・ｸ・ｩ: ・壱｡・・・龍 */
+  background: #e9f8ef;
+  border-color: #29b36a;
+  color: #0b5d33;
+}
+
+.tagQuoteMine:hover {
+  background: #dff4e7;
+  border-color: #1fa25d;
+}
+
+.tagAnon {
+  /* ・ｵ・・・壱ｬｸ: ・ｴ・ｼ ・・龍 */
+  background: #f2ecff;
+  border-color: #8a5cff;
+  color: #3d1e8a;
+}
+
+.tagAnon:hover {
+  background: #ebe2ff;
+  border-color: #7747ff;
+}
+
+.tagQuoteOther {
+  /* ・ｨ・・孖ｸ・・・ｸ・ｩ: ・ｼ嶹ｩ ・・龍 */
+  background: #fff2e6;
+  border-color: #ff9a3c;
+  color: #7a3a00;
+}
+
+.tagQuoteOther:hover {
+  background: #ffe9d6;
+  border-color: #ff8a1f;
+}
+
+.clickableId,
+.clickableDate {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.clickableId:hover,
+.clickableDate:hover {
+  text-decoration: underline;
+}
+
+.ytIcon {
+  display: inline-block;
+  width: 14px;
+  height: 10px;
+  background: #ff0000;
+  border-radius: 2px;
+  position: relative;
+  vertical-align: middle;
+  margin-right: 3px;
+}
+
+.ytIcon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-30%, -50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 3px 0 3px 5px;
+  border-color: transparent transparent transparent #fff;
+}
+
+.rtPrefix {
+  font-weight: 700;
+  color: #559923;
+}
+
+.mentionLink {
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+.mentionLink:hover {
+  text-decoration: underline;
+}
+
+.copyTweetBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 14px;
+  height: 14px;
+  margin-left: 6px;
+  cursor: pointer;
+  color: #999;
+  vertical-align: middle;
+  transition: color 0.12s, transform 0.12s;
+}
+
+.copyTweetBtn:hover {
+  color: #555;
+  transform: scale(1.1);
+}
+
+.copyTweetBtn svg {
+  pointer-events: none;
+}
+
+.orphanIndent {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 16px;
+}
+
+.mediaGridSmall {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.mediaGridSmall img,
+.mediaGridSmall video {
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+}
+
+tbody tr {
+  cursor: pointer;
+}
+
+tbody tr:hover td {
+  background: #f0f4ff;
+}
+
+tr.tweetSelected td {
+  background: #e8f0fe;
+}
+
+tr.tweetSelected:hover td {
+  background: #dce8fd;
+}
+
+tr.threadChild td {
+  background: #f9f9f9;
+}
+
+tr.threadChild td:nth-child(1) {
+  padding-left: 16px;
+}
+
+tr.tweetSelected.threadChild td {
+  background: #dce8fb;
+}
+
+tr.tweetSelected.threadChild:hover td {
+  background: #d0e2fa;
+}
+
+.threadReplyLabel {
+  font-size: 11px;
+  color: #888;
+  margin-left: 4px;
+}
+
+#advancedBox,
+#viewBox {
+  margin-top: 10px;
+}
+
+#advancedBox>summary,
+#viewBox>summary {
+  font-size: 13px;
+  font-weight: 700;
+  color: #555;
+  padding: 4px 0;
+}
+
+/* 笏笏 﨑・┣ 甯ｨ・・・溢擽・・寃 笏笏 */
+#keyword {
+  width: calc(100% - 20px);
+  box-sizing: border-box;
+  margin-top: 4px;
+}
+
+.filterSection {
+  margin-top: 10px;
+}
+
+.filterLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 5px;
+}
+
+.filterBtnGroup {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.filterDateGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+  margin-right: 20px;
+}
+
+.filterDateGroup label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #555;
+}
+
+.filterDateGroup input[type="date"] {
+  flex: 1;
+  box-sizing: border-box;
+}
+
+.filterInlineLabel {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #555;
+}
+
+.filterInlineLabel input[type="number"] {
+  width: 70px;
+}
+
+
+/* 笏笏 3・ｨ ・・腹 ・溢擽・・寃 笏笏 */
+#splitLayout {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+#filterPanel {
+  flex: 0 0 360px;
+  position: sticky;
+  top: 0;
+  max-height: calc(100vh - 64px - 34px);
+  /* 100vh - 﨑俯卿・・64px) - ・・葺甯ｨ・ｩ(32px) - ・､・ｨ・ｴ・・2px) */
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+#filterPanel h2 {
+  margin-top: 4px;
+  margin-bottom: 10px;
+}
+
+#mainPanel {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 720px;
+}
+
+#rightPanel {
+  flex: 0 0 360px;
+  position: sticky;
+  top: 0;
+  max-height: calc(100vh - 64px - 34px);
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+/* 笏笏 甯ｨ・・奝・ ・・(・們搗嶸・・・圸) 笏笏 */
+#panelBackdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.28);
+  z-index: 199;
+}
+
+#panelBackdrop.show {
+  display: block;
+}
+
+.panelToggleBar {
+  display: none;
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 96px;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  z-index: 201;
+  user-select: none;
+  transition: background 0.12s;
+}
+
+.panelToggleBar:hover {
+  background: #e4e4e4;
+}
+
+#filterPanelToggle {
+  left: 0;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+}
+
+#rightPanelToggle {
+  right: 0;
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+}
+
+.panelToggleLabel {
+  writing-mode: vertical-rl;
+  font-size: 11px;
+  color: #555;
+  transform: rotate(180deg);
+}
+
+#rightPanelToggle .panelToggleLabel {
+  transform: none;
+}
+
+/* 笏笏 ・們搗嶸・ 﨑・┣ 甯ｨ・・・ｼ・ ・ｨ・ (竕､ 1200px) 笏笏 */
+@media (max-width: 1200px) {
+  #filterPanel {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 360px;
+    max-width: 90vw;
+    max-height: 100vh;
+    transform: translateX(calc(-100% - 2px));
+    transition: transform 0.25s ease;
+    z-index: 200;
+    border-radius: 0;
+    border-left: none;
+  }
+
+  #filterPanel.panelOpen {
+    transform: translateX(0);
+  }
+
+  #filterPanelToggle {
+    display: flex;
+  }
+}
+
+/* 笏笏 ・們搗嶸・ ・ｰ・｡ 甯ｨ・尖巡 ・ｨ・ (竕､ 740px) 笏笏 */
+@media (max-width: 740px) {
+  #rightPanel {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 360px;
+    max-width: 90vw;
+    max-height: 100vh;
+    transform: translateX(calc(100% + 2px));
+    transition: transform 0.25s ease;
+    z-index: 200;
+    border-radius: 0;
+    border-right: none;
+  }
+
+  #rightPanel.panelOpen {
+    transform: translateX(0);
+  }
+
+  #rightPanelToggle {
+    display: flex;
+  }
+}
+
+#rightPanelHeader {
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  background: #f5f5f5;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#sortBox,
+#exportBox {
+  font-weight: 400;
+  font-size: 13px;
+}
+
+#sortBox>summary,
+#exportBox>summary {
+  font-size: 13px;
+  font-weight: 700;
+  color: #555;
+}
+
+#sortBox .row,
+#exportBox .row {
+  gap: 6px;
+}
+
+#panelSearch {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 7px;
+  font-size: 12px;
+  font-weight: 400;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.selectedCard {
+  padding: 10px 12px;
+  border-bottom: 1px solid #ddd;
+  border-left: 5px solid #c8d8f8;
+  display: flex;
+  gap: 6px;
+  flex-direction: column;
+}
+
+/* 우측 선택 패널의 마지막 요소는 항상 테두리 제거 (컨테이너 자체 테두리와 중첩 방지) */
+#selectedList .selectedCard:last-child {
+  border-bottom: none;
+}
+
+/* 내보내기 매니저 등 스크롤이 생기는 뷰어에서는 꽉 찼을 때만 마지막 테두리 제거 */
+.has-scroll .selectedCard:last-child {
+  border-bottom: none;
+}
+
+.selectedCard.panelThreadChild {
+  border-left-color: #8aa8dc;
+  margin-left: 12px;
+  background: #f8f9fc;
+}
+
+.selectedCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.selectedCardRemove {
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #bbb;
+  font-size: 22px;
+  padding: 0 3px;
+  line-height: 1;
+}
+
+.selectedCardRemove:hover {
+  color: #b00020;
+  background: none;
+  border-color: transparent;
+}
+
+/* ・罹椈・ｸ ・､ ・罹｡ｭ */
+.selectedCard {
+  cursor: grab;
+  user-select: none;
+}
+
+.selectedCard.dragging {
+  opacity: 0.45;
+  cursor: grabbing;
+}
+
+.dropIndicator {
+  height: 2px;
+  background: #1a73e8;
+  margin: 0;
+  pointer-events: none;
+  border-radius: 1px;
+}
+
+.dragGhost {
+  background: #fff;
+  border: 1px solid #1a73e8;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 12px;
+  color: #1a73e8;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 笏笏 ・ｴ・ｴ・ｴ・ｰ ・､・溢 ・ｵ・ｩ ・ｹ・・・菩侃 (・尖徐 ・・腹, ・､・・・ｱ) 笏笏 */
+.em-section-box {
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.em-section-title {
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 0;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
+  user-select: none;
+}
+
+.em-section-title::after {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-right: 1.5px solid #999;
+  border-bottom: 1.5px solid #999;
+  transform: rotate(45deg);
+  margin-right: 4px;
+  position: relative;
+  top: -2px;
+  /* 奛作侃孖ｸ ・・ｴ・､・ｼ・ｸ・・・樌ｶｰ ・懋ｰ・・・簿ｬ ・ｰ・・*/
+}
+
+.em-section-box.collapsed .em-section-title::after {
+  transform: rotate(-135deg);
+  top: 1px;
+  /* ・ｫ嶸肥揆 ・・・・｡・嵂･﨑 ・・・・・懋ｰ・・・ｴ・・*/
+}
+
+.em-section-content {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.em-section-box.collapsed .em-section-content {
+  display: none;
+}
+
+.em-section-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #555;
+}
+
+.em-section-input {
+  width: 50px !important;
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: left;
+  font-size: 13px;
+}
+
+.em-section-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* 笏笏 ・・・・ｴ・ｴ・ｴ・ｰ ・ｨ・ｬ (孖ｹ・倆剩) 笏笏 */
+#advExportModal {
+  width: 500px;
+  max-width: 90vw;
+  max-height: 80vh;
+}
+
+.advExportBody {
+  padding: 16px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+#advExportModal {
+  background: #fff;
+  border-radius: 8px;
+  width: 560px;
+  max-width: 95vw;
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+}
+
+.advExportHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #ddd;
+  flex-shrink: 0;
+}
+
+.advExportHeader h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.advExportClose {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.advExportClose:hover {
+  color: #333;
+  background: none;
+  border-color: transparent;
+}
+
+.advExportBody {
+  padding: 16px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.em-adv-step {
+  font-size: 11px;
+  font-weight: 700;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.em-adv-folder-hint {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.em-adv-image-list {
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+
+.em-adv-image-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 12px;
+  font-family: monospace;
+  word-break: break-all;
+}
+
+.em-adv-image-row:last-child {
+  border-bottom: none;
+}
+
+.em-adv-image-row img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+  border: 1px solid #ddd;
+}
+
+#advExportPasteArea {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 11px;
+  font-family: monospace;
+  resize: vertical;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.em-adv-match-status {
+  font-size: 12px;
+  margin-top: 4px;
+  min-height: 16px;
+}
+
+.em-adv-match-ok {
+  color: #0b7d3a;
+}
+
+.em-adv-match-partial {
+  color: #b06800;
+}
+
+.em-adv-match-none {
+  color: #888;
+}
+
+
+
+#exportManagerOverlay {
+  z-index: 9999;
+  /* ・肥攤 ・溢擽・・寃 ・・ 奝・､孖ｸ ・・椈 */
+}
+
+#exportManagerModal {
+  width: 900px;
+  max-width: 95vw;
+  height: 85vh;
+}
+
+
+
+.exportManagerLeft {
+  width: 240px;
+  border-right: 1px solid #ddd;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  background: #fafafa;
+  overflow-y: auto;
+}
+
+.exportManagerRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background: #f0f2f5;
+  /* ・ｽ・・・ｴ・川垓 ・ｰ・ｽ・ｼ・・・・腹・・・尖ｌ ・菩｡ｰ */
+  min-width: 0;
+}
+
+.exportManagerStepTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+#emChunkList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.em-chunk-btn {
+  text-align: left;
+  padding: 8px 12px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.em-chunk-btn:hover {
+  border-color: #1a73e8;
+  background: #f8faff;
+}
+
+.em-chunk-btn.active {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 1px #1a73e8;
+  background: #f0f4ff;
+}
+
+.em-chunk-count {
+  font-size: 11px;
+  color: #666;
+  background: #e0e0e0;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+#emViewer {
+  flex: 1;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding-left: 6px;
+  /* selectedList ・肥梵・ｸ・ｼ ・ｰ・作┳ ・・ */
+}
+
+/* 분할선 스타일링 */
+.em-divider+.selectedCard {
+  border-top: 1px solid #ddd;
+}
+
+/* 분할선 스타일링 */
+.em-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 16px 0;
+  cursor: grab;
+  user-select: none;
+}
+
+.em-divider.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.emDividerLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 2px dashed #1a73e8;
+  z-index: 1;
+}
+
+.emDividerContent {
+  position: relative;
+  z-index: 2;
+  background: #fff;
+  padding: 4px 16px;
+  border: 1px solid #1a73e8;
+  border-radius: 999px;
+  color: #1a73e8;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.emDividerRemoveBtn {
+  background: none;
+  border: none;
+  color: #1a73e8;
+  cursor: pointer;
+  padding: 0 2px;
+  font-size: 14px;
+  line-height: 1;
+  border-radius: 50%;
+}
+
+.emDividerRemoveBtn:hover {
+  color: #b00020;
+  background: #ffebeb;
+}
+
+
+
+/* 笏笏 3・ｨ・・夋・・攵・ｸ(・・哩 ・・・) ・ｭ增ｬ ・・款 ・､夋・ｼ 笏笏 */
+button.em-chunk-btn.completed {
+  border-color: #34a853;
+  background-color: #f6fcf8;
+  color: #333;
+  font-weight: 600;
+}
+
+/* 笏笏 Toast Notification (・・ｹｨ・・・ ・誤ｦｼ) 笏笏 */
+.em-toast {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(43, 58, 74, 0.95);
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 11000;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.em-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 笏笏 﨑俯卿 ・・・・・(Full-width Bottom Bar) 笏笏 */
+.em-bottom-bar {
+  flex-shrink: 0;
+  /* ・ｵ・・揆 ・場ｸｰ・ ・喜搆 */
+  width: 100%;
+  height: 64px;
+  background: #ffffff;
+  border-top: 1px solid #ddd;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.em-bottom-bar-content {
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.em-bb-left {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 150px;
+}
+
+.em-bb-label {
+  font-size: 13px;
+  color: #666;
+}
+
+.em-bb-count {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a73e8;
+}
+
+.em-bb-unit {
+  font-size: 13px;
+  color: #888;
+}
+
+.em-bb-center {
+  display: none;
+}
+
+.em-bb-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* 프리미엄 액션 그룹 */
+.export-tool-group {
+  display: flex;
+  align-items: center;
+  background: #f1f3f4;
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid #dadce0;
+  height: 44px;
+  box-sizing: border-box;
+}
+
+.em-bb-formats {
+  display: flex;
+  gap: 12px;
+  margin-right: 12px;
+  padding-left: 12px;
+}
+
+.pill-btn {
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  font-size: 13px;
+  color: #444;
+  user-select: none;
+}
+
+.pill-btn input {
+  margin: 0;
+  cursor: pointer;
+}
+
+/* 하단 바 보조 복구 버튼 */
+.em-bb-restore-btn {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  height: 34px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #5f6368;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  user-select: none;
+  margin-right: 2px;
+}
+
+.em-bb-restore-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #202124;
+}
+
+#exportBtn {
+  height: 34px;
+  margin: 0;
+  padding: 0 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(26, 115, 232, 0.3);
+  border: none;
+}
+
+/* 하단 바 버튼 전용 공통 스타일 */
+.btn-bottom-action {
+  height: 34px;
+  margin: 0;
+  padding: 0 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(26, 115, 232, 0.3);
+  border: none;
+}
+
+/* 아웃라인 버튼 버튼 스타일 */
+.btn-outline {
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #dadce0;
+  color: #3c4043;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-outline:hover:not(:disabled) {
+  background: #f8f9fa;
+  border-color: #1a73e8;
+  color: #1a73e8;
+}
+
+.btn-outline:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 800px) {
+  .em-bottom-bar-content {
+    padding: 0 16px;
+  }
+
+  /* 선택된 트윗 라벨 숨김 (숫자만 표시) */
+  .em-bb-label {
+    display: none;
+  }
+
+  /* 두 번째 툴 그룹(내보내기 매니저) 숨김 */
+  .em-bb-right .export-tool-group:nth-child(2) {
+    display: none;
+  }
+
+  .em-bb-left {
+    min-width: unset;
+  }
+}
+
+/* 笏笏 寀ｰ・､奝・ｬ ・ｸ・ｬ・ｴ・ｰ ・・圸 ・､夋・ｼ (Tistory-like environment) 笏笏 */
+.tistory-preview-content {
+  color: #333;
+}
+
+/* ・ｸ・ｸ line-height */
+.tistory-preview-content p[data-ke-size="size16"] {
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* ・ｬ・・│ ・ｵ奝ｵ margin */
+.tistory-preview-content hr[data-ke-type="horizontalRule"] {
+  border: none;
+  height: 1px;
+  margin: 41px 0;
+}
+
+/* style5 ・ｬ・・│ ・餓メ */
+.tistory-preview-content,
+.tistory-preview-content p,
+.tistory-preview-content span {
+  font-family: 'Noto Sans KR', sans-serif !important;
+}
+
+.tistory-preview-content hr[data-ke-style="style5"] {
+  background-color: #555555;
+}
+
+/* style6 ・ｬ・・│ ・餓メ */
+.tistory-preview-content hr[data-ke-style="style6"] {
+  background-color: #d0d0d0;
+}
+
+/* blockquote style3 (嵭､・・・罷｡・ */
+.tistory-preview-content blockquote[data-ke-style="style3"] {
+  border: 1px solid #dddddd;
+  background-color: #fcfcfc;
+  text-align: left;
+  padding: 21px 25px 20px 25px;
+  color: #666;
+  font-size: 1em;
+  line-height: 1.75;
+  margin: 20px 0;
+}
+
+/* 孖ｸ・・・們搗 ・們ｹ・(SVG ・・擽・・・・・ */
+.tweetMetrics {
+  display: flex;
+  gap: 16px;
+  color: #666;
+}
+
+.metric {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: bold;
+  user-select: none;
+  line-height: 1;
+}
+
+.metric svg {
+  flex-shrink: 0;
+  display: block;
+}
+
+.metric-rt svg {
+  color: #06b47b;
+}
+
+.metric-fav svg {
+  color: #f91880;
+}
+
+/* ・・・・・・・〓 ・・擽・・*/
+.metric-link {
+  color: #999;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+/* 마크다운 미리보기 스타일 */
+.markdown-preview-content blockquote {
+  border-left: 4px solid #dfe2e5;
+  color: #6a737d;
+  padding: 0 1em;
+  margin: 0 0 16px 0;
+}
+
+.markdown-preview-content a {
+  color: #0366d6;
+  text-decoration: underline;
+}
+
+.markdown-preview-content hr {
+  height: 1px;
+  padding: 0;
+  margin: 24px 0;
+  background-color: #e1e4e8;
+  border: 0;
+}
+
+.markdown-preview-content p {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+/* ── 인쇄 및 PDF 내보내기 전용 스타일 ────────────────────────── */
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 11pt;
+    /* 인쇄에 적합한 크기 */
+  }
+
+  /* 티스토리 변환 엔진 결과물 최적화 */
+  .tistory-preview-content {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  /* 트윗 단위 페이지 분할 방지 */
+  p,
+  blockquote,
+  table,
+  hr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* 가로 구분선 스타일 유지 */
+  hr[data-ke-style="style5"],
+  hr[data-ke-style="style6"] {
+    border: 0;
+    border-top: 1px solid #eee !important;
+    margin: 20px 0 !important;
+    display: block !important;
+  }
+
+  /* 이미지 크기 제한 및 정렬 */
+  img {
+    max-width: 100%;
+    /* 옵션(400px 등)이 적용될 수 있게 !important 제거 */
+    height: auto !important;
+    display: inline-block;
+    /* text-align 설정을 따르기 위해 inline-block으로 변경 */
+    margin: 10px 0;
+    /* 강제 중앙 정렬 제거 */
+  }
+
+  /* 링크 색상 유지 또는 흑백 처리 선택 (여기서는 유지) */
+  a {
+    color: #37a2d7 !important;
+    text-decoration: underline !important;
+  }
+
+  /* 인용구 스타일 */
+  blockquote[data-ke-style="style3"] {
+    border-left: 4px solid #ddd !important;
+    padding-left: 15px !important;
+    margin: 20px 0 !important;
+    color: #666 !important;
+  }
+}
+
+/* --- 동영상 안내용 심플 툴팁 --- */
+.em-info-btn {
+  cursor: help;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  margin-left: 6px;
+  position: relative;
+  opacity: 0.6;
+  vertical-align: middle;
+}
+
+.em-info-btn:hover {
+  opacity: 1;
+}
+
+.em-info-svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.em-info-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10000;
+  width: 400px;
+  background: #ffffff;
+  color: #333;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  display: none;
+  white-space: pre-wrap;
+  word-break: keep-all;
+  margin-top: 8px;
+}
+
+.em-info-btn:hover::after {
+  display: block;
+}
