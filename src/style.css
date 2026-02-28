@@ -1660,25 +1660,22 @@ button.em-chunk-btn.completed {
   }
 }
 
-/* 笏笏 寀ｰ・､奝・ｬ ・ｸ・ｬ・ｴ・ｰ ・・圸 ・､夋・ｼ (Tistory-like environment) 笏笏 */
 .tistory-preview-content {
   color: #333;
 }
 
-/* ・ｸ・ｸ line-height */
 .tistory-preview-content p[data-ke-size="size16"] {
   line-height: 1.75;
   margin: 0;
 }
 
-/* ・ｬ・・│ ・ｵ奝ｵ margin */
 .tistory-preview-content hr[data-ke-type="horizontalRule"] {
   border: none;
   height: 1px;
   margin: 41px 0;
 }
 
-/* style5 ・ｬ・・│ ・餓メ */
+/* style5*/
 .tistory-preview-content,
 .tistory-preview-content p,
 .tistory-preview-content span {
@@ -1689,12 +1686,12 @@ button.em-chunk-btn.completed {
   background-color: #555555;
 }
 
-/* style6 ・ｬ・・│ ・餓メ */
+/* style6*/
 .tistory-preview-content hr[data-ke-style="style6"] {
   background-color: #d0d0d0;
 }
 
-/* blockquote style3 (嵭､・・・罷｡・ */
+/* blockquote style3 */
 .tistory-preview-content blockquote[data-ke-style="style3"] {
   border: 1px solid #dddddd;
   background-color: #fcfcfc;
@@ -1706,13 +1703,6 @@ button.em-chunk-btn.completed {
   margin: 20px 0;
 }
 
-/* 孖ｸ・・・們搗 ・們ｹ・(SVG ・・擽・・・・・ */
-.tweetMetrics {
-  display: flex;
-  gap: 16px;
-  color: #666;
-}
-
 .metric {
   display: inline-flex;
   align-items: center;
@@ -1722,6 +1712,13 @@ button.em-chunk-btn.completed {
   user-select: none;
   line-height: 1;
 }
+
+.metric-count {
+  position: relative;
+  top: -1px;
+  /* 숫자가 미묘하게 낮아 보이는 현상 보정 */
+}
+
 
 .metric svg {
   flex-shrink: 0;
@@ -1736,7 +1733,6 @@ button.em-chunk-btn.completed {
   color: #f91880;
 }
 
-/* ・・・・・・・〓 ・・擽・・*/
 .metric-link {
   color: #999;
   display: inline-flex;
