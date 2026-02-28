@@ -12,7 +12,7 @@
 
 ### 2. 폴더 배치
 
-트위터 아카이브 zip을 새 폴더에 압축해제한 뒤, 해당 폴더 안에 YAYO tweet manager 폴더를 넣으세요. (assets, data, your archive.html이 있는 폴더)
+zip을 다운받아 압축해제한 뒤, 트위터 아카이브 데이터가 들어있는 폴더 안에 YAYO tweet manager 폴더를 넣으세요. (assets, data, your archive.html이 있는 폴더)
 
 ```
 📁 트위터 아카이브 폴더
