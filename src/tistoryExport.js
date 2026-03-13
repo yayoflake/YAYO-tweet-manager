@@ -45,16 +45,6 @@ function generateTistoryHtml(tweets, tagMap, isLocalPreview = false, options = {
     // 아이콘 설정
     let rtIcon, favIcon, linkIcon;
 
-    // 투명 1x1 GIF (src 대용)
-    const BLANK_IMG = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
-    // 공통 CSS 클래스 식별자 생성 (고유성을 위해 타임스탬프 활용을 피하고, 단순 클래스명 사용)
-    const clsRt = "yayo-ico-rt";
-    const clsFav = "yayo-ico-fav";
-    const clsLink = "yayo-ico-link";
-
-    // 스타일 블록 내용
-    let styleBlockHtml = "";
-
     if (isText) {
         rtIcon = 'RT: ';
         favIcon = 'Fav: ';
@@ -65,44 +55,13 @@ function generateTistoryHtml(tweets, tagMap, isLocalPreview = false, options = {
         linkIcon = '🔗';
     } else {
         const isGray = styleOption === 'styleB';
-        const rtColor = isGray ? '#999' : '#06b47b';
-        const favColor = isGray ? '#999' : '#f91880';
-        const linkColor = '#999';
+        const rtUrl = isGray ? './yayo_icons/rt_B.svg' : './yayo_icons/rt_A.svg';
+        const favUrl = isGray ? './yayo_icons/fav_B.svg' : './yayo_icons/fav_A.svg';
+        const linkUrl = './yayo_icons/link.svg';
 
-        const rtSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="${rtColor}"><path d="M4.5 3.88l4.432 4.14-1.364 1.46L5.5 7.55V16c0 1.1.896 2 2 2H13v2H7.5c-2.209 0-4-1.79-4-4V7.55L1.432 9.48.068 8.02 4.5 3.88zM16.5 6H11V4h5.5c2.209 0 4 1.79 4 4v8.45l2.068-1.93 1.364 1.46-4.432 4.14-4.432-4.14 1.364-1.46 2.068 1.93V8c0-1.1-.896-2-2-2z"></path></svg>`;
-        const favPath = "M20.884 13.19c-1.351 2.48-4.001 5.12-8.379 7.67l-.503.3-.504-.3c-4.379-2.55-7.029-5.19-8.382-7.67-1.36-2.5-1.41-4.86-.514-6.67.887-1.79 2.647-2.91 4.601-3.01 1.651-.09 3.368.56 4.798 2.01 1.429-1.45 3.146-2.1 4.796-2.01 1.954.1 3.714 1.22 4.601 3.01.896 1.81.846 4.17-.514 6.67z";
-        
-        let favSvg = "";
-        if (isGray) {
-            // 스타일B: 테두리 버전
-            favSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${favColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${favPath}"></path></svg>`;
-        } else {
-            // 스타일A: 꽉 찬 하트
-            favSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="${favColor}"><path d="${favPath}"></path></svg>`;
-        }
-        
-        const linkSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="${linkColor}"><path d="M18.36 5.64c-1.95-1.96-5.11-1.96-7.07 0L9.88 7.05 8.46 5.64l1.42-1.42c2.73-2.73 7.16-2.73 9.9 0 2.73 2.74 2.73 7.17 0 9.9l-1.42 1.42-1.41-1.42 1.41-1.41c1.96-1.96 1.96-5.12 0-7.07zm-2.12 3.53l-7.07 7.07-1.41-1.41 7.07-7.07 1.41 1.41zm-12.02.71l1.42-1.42 1.41 1.42-1.41 1.41c-1.96 1.96-1.96 5.12 0 7.07 1.95 1.96 5.11 1.96 7.07 0l1.41-1.41 1.42 1.41-1.42 1.42c-2.73 2.73-7.16 2.73-9.9 0-2.73-2.74-2.73-7.17 0-9.9z"></path></svg>`;
-
-        // CSS 스타일 생성
-        styleBlockHtml = `<style>
-            .${clsRt} { background-image: url("data:image/svg+xml;base64,${btoa(rtSvg)}"); }
-            .${clsFav} { background-image: url("data:image/svg+xml;base64,${btoa(favSvg)}"); }
-            .${clsLink} { background-image: url("data:image/svg+xml;base64,${btoa(linkSvg)}"); }
-            .${clsRt}, .${clsFav}, .${clsLink} { 
-                display: inline-block !important; 
-                vertical-align: middle; 
-                border: none; 
-                width: 16px; 
-                height: 16px; 
-                background-size: cover; 
-                background-repeat: no-repeat;
-            }
-        </style>`.replace(/\s+/g, " ");
-
-        // 1x1 투명 이미지를 src로 사용하고, 배경으로 아이콘을 렌더링하는 img 태그
-        rtIcon = `<img src="${BLANK_IMG}" class="${clsRt}" style="display:inline-block !important; vertical-align:middle; border:none; margin-right:4px;" />`;
-        favIcon = `<img src="${BLANK_IMG}" class="${clsFav}" style="display:inline-block !important; vertical-align:middle; border:none; margin-right:4px;" />`;
-        linkIcon = `<img src="${BLANK_IMG}" class="${clsLink}" style="display:inline-block !important; vertical-align:middle; border:none;" />`;
+        rtIcon = `<img src="${rtUrl}" width="16" height="16" style="display:inline-block !important; vertical-align:middle; border:none; margin-right:4px;" />`;
+        favIcon = `<img src="${favUrl}" width="16" height="16" style="display:inline-block !important; vertical-align:middle; border:none; margin-right:4px;" />`;
+        linkIcon = `<img src="${linkUrl}" width="16" height="16" style="display:inline-block !important; vertical-align:middle; border:none;" />`;
     }
 
     const HR5 = '<hr contenteditable="false" data-ke-style="style5" data-ke-type="horizontalRule" />'; //트윗 사이 구분선
@@ -111,11 +70,6 @@ function generateTistoryHtml(tweets, tagMap, isLocalPreview = false, options = {
     const TEXT_SEP = '--------------------------------------------------';
 
     const lines = [];
-
-    // CSS 클래스를 정의한 스타일 블록을 가장 먼저 삽입
-    if (isHtml && styleBlockHtml) {
-        lines.push(styleBlockHtml);
-    }
 
     // 티스토리 업로드용 최종 HTML에만 폰트 임포트 포함
     if (isHtml && !isLocalPreview) {
