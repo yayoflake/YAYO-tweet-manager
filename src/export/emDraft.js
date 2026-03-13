@@ -29,7 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 imgResize: document.getElementById('emImgResize')?.checked,
                 imgMaxWidth: document.getElementById('emImgMaxWidth')?.value,
                 autoSplitCount: document.getElementById('emAutoSplitCount')?.value,
-                autoSplitIgnoreThread: document.getElementById('emAutoSplitIgnoreThread')?.checked
+                autoSplitIgnoreThread: document.getElementById('emAutoSplitIgnoreThread')?.checked,
+                incExtVideo: document.getElementById('emStep3IncVideo')?.checked,
+                extVideoPrefix: document.getElementById('emStep3VideoPrefix')?.value
             },
             timestamp: Date.now()
         };
@@ -93,6 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const emImgMaxWidth = document.getElementById('emImgMaxWidth');
                 const emAutoSplitCountInput = document.getElementById('emAutoSplitCount');
                 const emAutoSplitIgnoreThreadChk = document.getElementById('emAutoSplitIgnoreThread');
+                const emStep3IncVideo = document.getElementById('emStep3IncVideo');
+                const emStep3VideoPrefix = document.getElementById('emStep3VideoPrefix');
 
                 if (emIncDate) emIncDate.checked = s.incDate;
                 if (emIncRt) emIncRt.checked = s.incRt;
@@ -109,6 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 if (emAutoSplitCountInput) emAutoSplitCountInput.value = s.autoSplitCount;
                 if (emAutoSplitIgnoreThreadChk) emAutoSplitIgnoreThreadChk.checked = s.autoSplitIgnoreThread;
+                if (emStep3IncVideo) emStep3IncVideo.checked = !!s.incExtVideo;
+                if (emStep3VideoPrefix) emStep3VideoPrefix.value = s.extVideoPrefix || '';
             }
 
             _em.fn.updateManagerIndices();

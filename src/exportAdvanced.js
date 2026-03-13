@@ -24,6 +24,24 @@
     return items;
   }
 
+  function collectVideoItems(tweets) {
+    const items = [];
+    const seen = new Set();
+    if (!tweets) return items;
+    for (const t of tweets) {
+      if (!t) continue;
+      const tId = String(t.id || t.id_str || "");
+      for (const m of getMediaItemsFromTweet(t)) {
+        if (m.kind !== "video") continue;
+        const fname = `${tId}-${m.name}`;
+        if (seen.has(fname)) continue;
+        seen.add(fname);
+        items.push({ fname, localUrl: m.url });
+      }
+    }
+    return items;
+  }
+
   // ── 치환자 변환 (1-1: alignCenter→alignLeft, 1-3: width 제한) ─────────────────
 
   function transformTistoryTag(tag) {
@@ -208,6 +226,7 @@
 
   window.exportAdvanced = {
     collectPhotoItems,
+    collectVideoItems,
     parseTistoryImageTags,
     updateMatchStatus,
     downloadCopyScript,

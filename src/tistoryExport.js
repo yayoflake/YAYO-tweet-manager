@@ -207,12 +207,14 @@ function generateTistoryHtml(tweets, tagMap, isLocalPreview = false, options = {
 
         // 미디어 플레이스홀더 (고급 내보내기 시 치환자 태그로 대체)
         const mediaItems = getMediaItemsFromTweet(t);
-        for (const m of mediaItems) {
+        for (let j = 0; j < mediaItems.length; j++) {
+            const m = mediaItems[j];
             const fname = `${tId}-${m.name}`;
+            
+            // 1) 아이템 렌더링
             if (_tagMap.has(fname)) {
                 lines.push(_tagMap.get(fname));
-                if (isHtml) lines.push(BLANK);
-                else lines.push('');
+                if (!isHtml) lines.push('');
             } else if (isAdvanced && m.kind === 'image') {
                 const resize = options.imgResize !== false;
                 const maxWidth = options.imgMaxWidth || (typeof TISTORY_IMAGE_MAX_WIDTH !== "undefined" ? TISTORY_IMAGE_MAX_WIDTH : 500);
@@ -220,7 +222,6 @@ function generateTistoryHtml(tweets, tagMap, isLocalPreview = false, options = {
                     const alignStyle = (typeof TISTORY_IMAGE_ALIGN !== "undefined" && TISTORY_IMAGE_ALIGN === "alignLeft") ? "text-align: left;" : "text-align: center;";
                     const imgStyle = resize ? `max-width: ${maxWidth}px; height: auto; border-radius: 8px; border: 1px solid #eee;` : `max-width: 100%; height: auto; border-radius: 8px; border: 1px solid #eee;`;
                     lines.push(`<p data-ke-size="size16" style="${alignStyle}"><img src="${m.url}" alt="${escHtml(m.name)}" style="${imgStyle}" /></p>`);
-                    lines.push(BLANK);
                 } else if (isText) {
                     lines.push(`[이미지: ${m.name}]`);
                 } else {
@@ -234,11 +235,36 @@ function generateTistoryHtml(tweets, tagMap, isLocalPreview = false, options = {
                     }
                     lines.push('\n');
                 }
-            } else { // isAdvanced가 false이거나 이미지가 아닌 경우 플레이스홀더
+            } else if (m.kind === 'video' && options.incExtVideo && options.extVideoPrefix) {
+                const finalUrl = options.extVideoPrefix + fname;
+                if (isHtml) {
+                    lines.push(`<p data-ke-size="size16" style="text-align: center;"><video controls width="100%"><source src="${escHtml(finalUrl)}" type="video/mp4"></video></p>`);
+                } else if (isText) {
+                    lines.push(`[외부 동영상: ${finalUrl}]`);
+                } else {
+                    lines.push('');
+                    lines.push(`<video controls width="100%"><source src="${escHtml(finalUrl)}" type="video/mp4"></video>`);
+                    lines.push('\n');
+                }
+            } else { // isAdvanced가 false이거나 아무 조건도 해당하지 않을 때 플레이스홀더
                 if (isHtml) lines.push(`<p>[${escHtml(fname)}]</p>`);
                 else lines.push(`[${fname}]`);
-                if (isHtml) lines.push(BLANK);
-                else lines.push('');
+                if (!isHtml) lines.push('');
+            }
+
+            // 2) 줄바꿈 로직 (HTML 전용)
+            // 이미지-이미지 사이에는 줄바꿈 없음, 그 외(이미지 묶음 끝, 동영상 끝)에는 줄바꿈 추가
+            if (isHtml) {
+                const isCurrentImg = (m.kind === 'image' || _tagMap.has(fname));
+                const nextM = mediaItems[j + 1];
+                const nextFname = nextM ? `${tId}-${nextM.name}` : null;
+                const isNextImg = nextM && (nextM.kind === 'image' || _tagMap.has(nextFname));
+
+                if (isCurrentImg && isNextImg) {
+                    // 이미지 다음이 이미지면 줄바꿈 안 함
+                } else {
+                    lines.push(BLANK);
+                }
             }
         }
 

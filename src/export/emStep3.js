@@ -56,6 +56,8 @@ window._emSteps = {
                 isAdvanced: emIncMedia ? emIncMedia.checked : false,
                 imgResize: emImgResize ? emImgResize.checked : false,
                 imgMaxWidth: emImgMaxWidth ? emImgMaxWidth.value : 400,
+                incExtVideo: document.getElementById('emStep3IncVideo') ? document.getElementById('emStep3IncVideo').checked : false,
+                extVideoPrefix: document.getElementById('emStep3VideoPrefix') ? document.getElementById('emStep3VideoPrefix').value.trim() : '',
                 format: format,
                 ...overrides
             };
@@ -79,6 +81,46 @@ window._emSteps = {
                 chunks.push([...currentChunkTweets]);
             }
             return chunks;
+        }
+
+        const _updateStep3Outputs = () => {
+             if (_em.step === 3) {
+                  const emFormatEl = document.querySelector('input[name="emFormat"]:checked');
+                  const format = emFormatEl ? emFormatEl.value : 'html';
+                  const isText = (format === 'text');
+                  const isPdf = (format === 'pdf');
+                  const includeImages = emIncMedia ? emIncMedia.checked : false;
+                  
+                  if (!(includeImages && !isText) && !isPdf) {
+                       const textArea = document.getElementById('emStep3TextArea');
+                       if (textArea && window.generateTistoryHtml) {
+                           const chunkTweets = getChunkTweets(_em.currentChunkIndex);
+                           textArea.value = window.generateTistoryHtml(chunkTweets, new Map(), false, _buildExportOptions(format, { isAdvanced: false }));
+                       }
+                  }
+             }
+             if (_em.fn.debouncedSaveDraft) _em.fn.debouncedSaveDraft();
+        };
+
+        const emStep3IncVideo = document.getElementById('emStep3IncVideo');
+        const emStep3VideoPrefix = document.getElementById('emStep3VideoPrefix');
+        const emStep3VideoOptions = document.getElementById('emStep3VideoOptions');
+        if (emStep3IncVideo) {
+            emStep3IncVideo.addEventListener('change', () => {
+                const _videoPrefix = document.getElementById('emStep3VideoPrefix');
+                const _videoScriptBtn = document.getElementById('emStep3VideoScriptBtn');
+                const _videoCopyBtn = document.getElementById('emStep3VideoCopyBtn');
+                
+                const isChecked = emStep3IncVideo.checked;
+                if (_videoPrefix) _videoPrefix.disabled = !isChecked;
+                if (_videoScriptBtn) _videoScriptBtn.disabled = !isChecked;
+                if (_videoCopyBtn) _videoCopyBtn.disabled = !isChecked;
+                
+                _updateStep3Outputs();
+            });
+        }
+        if (emStep3VideoPrefix) {
+            emStep3VideoPrefix.addEventListener('input', _updateStep3Outputs);
         }
 
         function getChunkTweets(chunkIdx) {
@@ -194,9 +236,11 @@ window._emSteps = {
                 emStep3FormatText.textContent = fmtLab;
             }
             const includeImages = emIncMedia ? emIncMedia.checked : false;
+            const emStep3IncVideo = document.getElementById('emStep3IncVideo');
             if (emStep3DataText) {
                 let dataParts = [];
                 if (includeImages && !isText) dataParts.push('이미지');
+                if (emStep3IncVideo && emStep3IncVideo.checked) dataParts.push('외부영상');
                 if (emIncUserId && emIncUserId.checked) dataParts.push('ID');
                 if (emIncDate && emIncDate.checked) dataParts.push('날짜');
                 if (emIncTime && emIncTime.checked) dataParts.push('시간');
@@ -214,6 +258,108 @@ window._emSteps = {
 
             const chunk = chunks[currentChunkIndex];
             if (!chunk) return;
+
+            // 외부 동영상 옵션 갱신
+            const emStep3VideoCount = document.getElementById('emStep3VideoCount');
+            const emStep3VideoOptions = document.getElementById('emStep3VideoOptions');
+            
+            let videoItems = [];
+            if (window.exportAdvanced && window.exportAdvanced.collectVideoItems) {
+                videoItems = window.exportAdvanced.collectVideoItems(chunkTweets);
+            }
+            
+            if (emStep3VideoCount) {
+                emStep3VideoCount.textContent = `${videoItems.length}개의 동영상 있음`;
+            }
+            if (emStep3IncVideo) {
+                const _videoPrefix = document.getElementById('emStep3VideoPrefix');
+                const _videoScriptBtn = document.getElementById('emStep3VideoScriptBtn');
+                const _videoCopyBtn = document.getElementById('emStep3VideoCopyBtn');
+
+                if (videoItems.length === 0) {
+                    emStep3IncVideo.disabled = true;
+                    emStep3IncVideo.checked = false;
+                    
+                    if (_videoPrefix) _videoPrefix.disabled = true;
+                    if (_videoScriptBtn) _videoScriptBtn.disabled = true;
+                    if (_videoCopyBtn) _videoCopyBtn.disabled = true;
+                } else {
+                    emStep3IncVideo.disabled = false;
+                    
+                    const isChecked = emStep3IncVideo.checked;
+                    if (_videoPrefix) _videoPrefix.disabled = !isChecked;
+                    if (_videoScriptBtn) _videoScriptBtn.disabled = !isChecked;
+                    if (_videoCopyBtn) _videoCopyBtn.disabled = !isChecked;
+                }
+            }
+
+            // 동영상 파일 탐색기 연동 로직
+            const videoScriptBtn = document.getElementById('emStep3VideoScriptBtn');
+            const videoCopyBtn = document.getElementById('emStep3VideoCopyBtn');
+            const videoHintSpan = document.getElementById('emStep3VideoHint');
+            
+            if (videoScriptBtn && videoCopyBtn && videoHintSpan) {
+                const newScriptBtn = videoScriptBtn.cloneNode(true);
+                const newCopyBtn = videoCopyBtn.cloneNode(true);
+                videoScriptBtn.parentNode.replaceChild(newScriptBtn, videoScriptBtn);
+                videoCopyBtn.parentNode.replaceChild(newCopyBtn, videoCopyBtn);
+                
+                const _isServer = window.exportAdvanced && window.exportAdvanced.isLocalServer && window.exportAdvanced.isLocalServer();
+                
+                if (_isServer) {
+                    newScriptBtn.textContent = '탐색기에서 자동 선택';
+                    newCopyBtn.textContent = '임시 폴더에서 열기';
+                    newCopyBtn.style.display = '';
+                    videoHintSpan.textContent = '';
+                    
+                    if (videoItems.length > 0) {
+                        newScriptBtn.addEventListener('click', async () => {
+                             newScriptBtn.disabled = true;
+                             newScriptBtn.textContent = '여는 중...';
+                             const result = await window.exportAdvanced.openImagesInExplorer(videoItems);
+                             if (result && result.ok) {
+                                 videoHintSpan.textContent = `✔ ${result.selected}개 동영상 선택됨`;
+                                 _showToast(`✔ 탐색기에서 동영상 ${result.selected}개를 선택했습니다.`);
+                             } else {
+                                 videoHintSpan.textContent = '❌ 오류 발생';
+                             }
+                             newScriptBtn.disabled = false;
+                             newScriptBtn.textContent = '탐색기에서 자동 선택';
+                        });
+                        newCopyBtn.addEventListener('click', async () => {
+                             newCopyBtn.disabled = true;
+                             newCopyBtn.textContent = '복사 중...';
+                             const result = await window.exportAdvanced.copyImagesToTempFolder(videoItems);
+                             if (result && result.ok) {
+                                 videoHintSpan.textContent = `✔ ${result.copied}/${result.total}개 복사 완료`;
+                                 _showToast(`✔ 동영상 ${result.copied}개를 복사했습니다.`);
+                             } else {
+                                 videoHintSpan.textContent = '❌ 오류 발생';
+                             }
+                             newCopyBtn.disabled = false;
+                             newCopyBtn.textContent = '임시 폴더에서 열기';
+                        });
+                    } else {
+                        newScriptBtn.disabled = true;
+                        newCopyBtn.disabled = true;
+                    }
+                } else {
+                    newScriptBtn.textContent = '스크립트 다운로드 (.ps1)';
+                    newCopyBtn.style.display = 'none';
+                    videoHintSpan.textContent = '실행 시 자동 탐색기 열림';
+                    
+                    if (videoItems.length > 0 && window.exportAdvanced && typeof window.exportAdvanced.getMediaAbsPath === 'function' && window.exportAdvanced.getMediaAbsPath()) {
+                        newScriptBtn.addEventListener('click', () => {
+                            window.exportAdvanced.downloadCopyScript(videoItems);
+                        });
+                    } else {
+                        newScriptBtn.disabled = true;
+                        if (!window.exportAdvanced || typeof window.exportAdvanced.getMediaAbsPath !== 'function' || !window.exportAdvanced.getMediaAbsPath()) {
+                             videoHintSpan.textContent = "로컬(file://) 환경에서만 작동";
+                        }
+                    }
+                }
+            }
 
             if (isPdf) {
                 // PDF 전용 UI

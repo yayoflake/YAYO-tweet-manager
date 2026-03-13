@@ -121,6 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // updateSelectionCounts() 등에서 함께 처리됨 (기존 exportBtn과 비슷하게)
 
     exportManagerBtn.addEventListener('click', () => {
+        const restoreDraftBtn = document.getElementById('restoreDraftBtn');
+        if (restoreDraftBtn && restoreDraftBtn.style.display !== 'none') {
+            const confirmed = confirm("자동저장된 초안이 있습니다. 그래도 계속하시겠습니까?");
+            if (!confirmed) return;
+        }
         openExportManager();
     });
 

@@ -160,9 +160,11 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <span id="selectedCount">선택된 트윗 (0개)</span>
               <div style="display: flex; gap: 4px;">
-                <button id="saveListBtn" class="btn-outline btn-small" style="display: none;" title="현재 선택된 트윗 목록을 JSON 파일로 저장합니다.">목록
+                <button id="saveListBtn" class="btn-outline btn-small" style="display: none;"
+                  title="현재 선택된 트윗 목록을 JSON 파일로 저장합니다.">목록
                   저장</button>
-                <button id="loadListBtn" class="btn-outline btn-small" style="display: none;" title="저장된 JSON 파일에서 트윗 목록을 불러옵니다.">목록
+                <button id="loadListBtn" class="btn-outline btn-small" style="display: none;"
+                  title="저장된 JSON 파일에서 트윗 목록을 불러옵니다.">목록
                   불러오기</button>
                 <input type="file" id="loadListInput" accept=".json" style="display: none;" />
                 <button id="clearSelBtn" class="btn-danger" disabled>전체 해제</button>
@@ -401,6 +403,32 @@
                 </div>
               </div>
             </div>
+
+            <!-- 동영상 업로드 섹션 -->
+            <div class="em-section-box mb-2" id="emStep3VideoBox" style="display: none;">
+              <div class="em-section-title">외부 클라우드 연동</div>
+              <div class="em-section-content">
+                <div class="em-section-row" style="margin-bottom: 2px;">
+                  <label class="em-section-label" style="display: flex; align-items: center;">
+                    <input type="checkbox" id="emStep3IncVideo" /> <span>외부 클라우드 연동</span>
+                    <span class="em-info-btn" data-tooltip="트윗 본문 내의 동영상 플레이스홀더([xxx.mp4])를 실제 비디오 태그로 변환합니다.&#10;GitHub Releases 등에 동영상 파일을 업로드한 뒤, 해당 파일들이 위치한 경로의 URL 접두사를 입력하면 자동으로 주소가 완성되어 삽입됩니다.">
+                      <svg class="em-info-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    </span>
+                  </label>
+                </div>
+                <div class="em-section-row" style="margin-bottom: 8px;">
+                  <span id="emStep3VideoCount" class="muted">0개의 동영상 있음</span>
+                </div>
+                
+                <div id="emStep3VideoOptions">
+                  <input type="text" id="emStep3VideoPrefix" style="width: 100%; box-sizing: border-box; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; margin-bottom: 8px;" placeholder="URL 접두사 (https://...)" disabled />
+                  
+                  <button id="emStep3VideoCopyBtn" class="btn-primary w-100" style="display: none; margin-bottom: 6px;" disabled>임시 폴더에서 열기</button>
+                  <button id="emStep3VideoScriptBtn" class="btn-dark w-100" style="margin-bottom: 0;" disabled>탐색기에서 자동 선택</button>
+                  <div id="emStep3VideoHint" class="muted" style="text-align: right; font-size: 11px;"></div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="exportManagerStepTitle" id="emChunkListTitle" style="margin-top: 16px;">리스트</div>
@@ -497,6 +525,8 @@
   <script src="./src/export/emDraft.js"></script>
   <script src="./src/htmlConverter.js"></script>
   <script src="./src/layout.js"></script>
+  <!-- 개발자 전용 환경 설정 파일 (Git 무시됨, 다른 사용자는 무시됨) -->
+  <script src="./dev-env.js"></script>
 </body>
 
 <!-- HTML 변환기 (개인용 도구, 필요 시 display: block으로 변경하여 사용) -->
