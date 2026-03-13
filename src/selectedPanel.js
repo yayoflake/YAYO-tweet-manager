@@ -120,6 +120,18 @@ function _syncPanelThreadClasses() {
   });
 }
 
+// 기존 DOM 카드들의 번호(index)를 현재 순서에 맞게 동기화
+function _syncPanelIndices() {
+  if (!dom.selectedList) return;
+  const cards = dom.selectedList.querySelectorAll(".selectedCard");
+  cards.forEach((card, i) => {
+    const idxSpan = card.querySelector(".tweetIndex");
+    if (idxSpan) {
+      idxSpan.textContent = _panelHeadOffset + i + 1;
+    }
+  });
+}
+
 function _handlePointerMove(e) {
   if (!_dragSrcId) return;
   if (_dragGhost) {
@@ -177,6 +189,7 @@ function _handlePointerUp(e) {
       }
     }
     _syncPanelThreadClasses();
+    _syncPanelIndices();
     window.saveSelectedState();
   }
   _dragSrcId = null;
@@ -237,6 +250,7 @@ function _buildPanelCard(t, { isReply = false, isChild = false, index = null } =
     if (trEl) trEl.classList.remove("tweetSelected");
     card.remove();
     _syncPanelThreadClasses();
+    _syncPanelIndices();
     _syncSelectedCountDisplay();
     _updatePanelScrollClass();
     window.saveSelectedState();
@@ -295,6 +309,7 @@ function _removeCardFromPanel(id) {
   const card = dom.selectedList.querySelector(`.selectedCard[data-tweet-id="${id}"]`);
   if (card) card.remove();
   _syncPanelThreadClasses();
+  _syncPanelIndices();
   _updatePanelScrollClass();
   if (state.selectedIds.size === 0) {
     if (_panelObserver) { _panelObserver.disconnect(); _panelObserver = null; }

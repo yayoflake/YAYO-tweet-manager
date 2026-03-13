@@ -180,6 +180,13 @@ button:disabled {
   background: #4e555b;
 }
 
+.btn-small {
+  padding: 4px 8px !important;
+  font-size: 11px !important;
+  height: auto !important;
+  min-height: unset !important;
+}
+
 /* 笏笏 ・寀ｸ・ｬ寀ｰ 增ｴ・們侃 笏笏 */
 .w-100 {
   width: 100% !important;

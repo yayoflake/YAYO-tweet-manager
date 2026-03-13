@@ -16,5 +16,4 @@ if errorlevel 1 (
     exit /b 1
 )
 
-start "" http://localhost:7890
 node server.js

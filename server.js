@@ -314,11 +314,34 @@ var server = http.createServer(function (req, res) {
     handleStaticFile(req, res);
 });
 
-server.listen(PORT, function () {
-    console.log('');
-    console.log('  YAYO tweet manager 서버가 시작되었습니다.');
-    console.log('  http://localhost:' + PORT);
-    console.log('');
-    console.log('  이 창을 닫으면 서버가 종료됩니다.');
-    console.log('');
-});
+function startServer(port) {
+    server.on('error', function (err) {
+        if (err.code === 'EADDRINUSE') {
+            console.log('  ⚠️ 포트 ' + port + '가 이미 사용 중입니다. 빈 포트를 자동으로 찾습니다...');
+            // 포트를 0으로 지정하면 운영체제가 사용 가능한 임의의 포트를 자동 할당합니다.
+            server.listen(0);
+        } else {
+            console.error(err);
+        }
+    });
+
+    server.listen(port, function () {
+        var actualPort = server.address().port;
+        console.log('');
+        console.log('  YAYO tweet manager 서버가 시작되었습니다.');
+        console.log('  http://localhost:' + actualPort);
+        console.log('');
+        console.log('  브라우저를 자동으로 엽니다...');
+        console.log('  이 검은 창을 닫으면 서버가 종료됩니다.');
+        console.log('');
+
+        // Windows 환경용 브라우저 열기 명령어 (start.bat 역할 대체)
+        exec('start http://localhost:' + actualPort, function (err) {
+            if (err) {
+                console.log('  ⚠️ 브라우저를 자동으로 열지 못했습니다. 위 주소를 직접 복사해서 접속해 주세요.');
+            }
+        });
+    });
+}
+
+startServer(PORT);

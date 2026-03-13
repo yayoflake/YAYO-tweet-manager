@@ -159,7 +159,14 @@
           <div id="rightPanelHeader">
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <span id="selectedCount">선택된 트윗 (0개)</span>
-              <button id="clearSelBtn" class="btn-danger" disabled>선택한 트윗 전체 해제</button>
+              <div style="display: flex; gap: 4px;">
+                <button id="saveListBtn" class="btn-outline btn-small" style="display: none;" title="현재 선택된 트윗 목록을 JSON 파일로 저장합니다.">목록
+                  저장</button>
+                <button id="loadListBtn" class="btn-outline btn-small" style="display: none;" title="저장된 JSON 파일에서 트윗 목록을 불러옵니다.">목록
+                  불러오기</button>
+                <input type="file" id="loadListInput" accept=".json" style="display: none;" />
+                <button id="clearSelBtn" class="btn-danger" disabled>전체 해제</button>
+              </div>
             </div>
 
             <details id="sortBox">
@@ -204,6 +211,8 @@
 
         <div class="em-bb-center"></div>
         <div class="em-bb-right">
+          <button id="toggleHtmlConverterBtn" class="btn-outline"
+            style="display: none; height: 34px; padding: 0 12px; margin-right: 8px;">HTML 변환기</button>
           <div class="export-tool-group">
             <div class="em-bb-formats">
               <label class="pill-btn"><input type="radio" name="exportFormat" value="text"
@@ -478,6 +487,7 @@
   <script src="./src/ui.js"></script>
   <script src="./src/selectedPanel.js"></script>
   <script src="./src/tistoryExport.js"></script>
+  <script src="./src/listManager.js"></script>
   <script src="./src/app.js"></script>
   <script src="./src/exportAdvanced.js"></script>
   <script src="./src/export/emViewer.js"></script>
@@ -496,7 +506,10 @@
   <textarea id="converterInput"
     style="width: 100%; height: 150px; margin-bottom: 10px; font-family: monospace; font-size: 12px;"
     placeholder="여기에 이전 HTML을 붙여넣으세요..."></textarea>
-  <button id="convertBtn" class="btn-primary" style="width: 100%;">변환 및 클립보드 복사</button>
+  <div style="display: flex; gap: 8px;">
+    <button id="convertBtn" class="btn-primary" style="flex: 1;">변환 및 클립보드 복사</button>
+    <button id="findAndSelectBtn" class="btn-success" style="flex: 1;">트윗 찾아서 선택 추가</button>
+  </div>
 </div>
 
 </html>

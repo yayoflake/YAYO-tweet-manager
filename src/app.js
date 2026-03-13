@@ -60,6 +60,9 @@ const dom = {
   panelSearch: el("panelSearch"),
   rightPanelToggleCount: el("rightPanelToggleCount"),
   emToolbarCount: el("emToolbarCount"),
+  saveListBtn: el("saveListBtn"),
+  loadListBtn: el("loadListBtn"),
+  loadListInput: el("loadListInput"),
 };
 
 const state = {
@@ -450,6 +453,7 @@ function updateCounts(pageItems) {
 // ───────────────────────────────────────────────────────────────────────────
 
 function render() {
+  window.render = render; // 전역 노출 유지
   applyFilter();
 
   const { start, end, items } = getPageItems();
@@ -694,6 +698,22 @@ dom.pageSelect.addEventListener("change", () => goPage(dom.pageSelect.value, fal
 dom.pageSelectBottom.addEventListener("change", () => goPage(dom.pageSelectBottom.value, true));
 
 dom.exportBtn.addEventListener("click", exportSelected);
+
+if (dom.saveListBtn) {
+  dom.saveListBtn.addEventListener("click", () => {
+    if (window.listManager) window.listManager.saveSelectionToFile();
+  });
+}
+if (dom.loadListBtn && dom.loadListInput) {
+  dom.loadListBtn.addEventListener("click", () => dom.loadListInput.click());
+  dom.loadListInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file && window.listManager) {
+      window.listManager.loadSelectionFromFile(file);
+      e.target.value = ""; // 초기화
+    }
+  });
+}
 
 // init
 enableControls(false);

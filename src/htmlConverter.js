@@ -39,9 +39,10 @@ window.htmlConverter = {
             if (favMatch) favoriteCount = parseInt(favMatch[1], 10);
 
             // 2. 본문 내용 추출 (줄바꿈 보존)
-            // 브라우저의 innerText는 개행을 포함하지만 구조에 따라 다를 수 있으므로 
-            // <br>을 개행으로 명시적 치환 후 처리
             tempDiv.innerHTML = trimmed.replace(/<br\s*\/?>/gi, '\n');
+
+            // 이미지와 테이블(지표) 제거 - 텍스트 추출 시 간섭 방지
+            tempDiv.querySelectorAll('img, table').forEach(el => el.remove());
 
             const paragraphs = Array.from(tempDiv.querySelectorAll('p, div'));
             let lines = [];
@@ -49,6 +50,7 @@ window.htmlConverter = {
             if (paragraphs.length > 0) {
                 paragraphs.forEach(p => {
                     const text = p.innerText.trim();
+                    // Style C 아이콘 문자열 제외
                     if (text && !text.match(/🔁|❤/)) {
                         lines.push(text);
                     }
@@ -130,5 +132,58 @@ window.htmlConverter = {
     convert: function (html) {
         const data = this.parseOldHtml(html);
         return this.generateStyleAHtml(data);
+    },
+
+    /**
+     * 전체 트윗 데이터에서 파싱된 데이터와 일치하는 트윗들을 찾습니다.
+     * @param {Array} parsedData - parseOldHtml로부터 얻은 데이터 배열
+     * @param {Array} allTweets - 현재 state에 로드된 전체 트윗 배열
+     * @returns {Object} { matches: 매칭된 트윗 배열, failures: 실패한 데이터 배열 }
+     */
+    findMatchesInState: function (parsedData, allTweets) {
+        if (!allTweets || allTweets.length === 0) return { matches: [], failures: parsedData };
+
+        const matches = [];
+        const failures = [];
+
+        // 비교를 위해 텍스트 정규화 (매칭 방해 요소 제거)
+        const normalize = (txt) => {
+            return String(txt || "")
+                .replace(/https?:\/\/[^\s<>"]+/g, "") // 모든 URL 제거 (비교 시 불필요)
+                .replace(/\[[^\]]+\]/g, "") // [이미지...] 등 모든 대괄호 내용 제거
+                .replace(/[a-zA-Z0-9_\-]+\.(?:jpg|png|gif|mp4|mov|jpeg|webp)/gi, "") // 파일명처럼 생긴 텍스트 제거
+                .replace(/\s+/g, "") // 모든 공백 및 줄바꿈 제거
+                .trim();
+        };
+
+        parsedData.forEach(pItem => {
+            const pNorm = normalize(pItem.fullText);
+            if (!pNorm) return;
+
+            const myHandle = window.MY_HANDLE || "";
+
+            // 본문이 일치하는 첫 번째 트윗을 찾음
+            const matchedTweet = allTweets.find(t => {
+                // 원본 full_text 대신 미디어 URL 등이 제거된 cleanedText를 사용하여 매칭률 향상
+                let compareText = "";
+                if (typeof window.getDerived === 'function') {
+                    const d = window.getDerived(t, myHandle);
+                    compareText = d.cleanedText || "";
+                } else {
+                    compareText = t.full_text || "";
+                }
+
+                const tNorm = normalize(compareText);
+                return tNorm === pNorm;
+            });
+
+            if (matchedTweet) {
+                matches.push(matchedTweet);
+            } else {
+                failures.push(pItem);
+            }
+        });
+
+        return { matches, failures };
     }
 };

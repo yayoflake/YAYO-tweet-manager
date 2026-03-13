@@ -511,21 +511,99 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── HTML 변환기 이벤트 바인딩 (개인이 사용하는 도구) ──
     const convertBtn = document.getElementById('convertBtn');
     const converterInput = document.getElementById('converterInput');
+    const findAndSelectBtn = document.getElementById('findAndSelectBtn');
+
+    if (toggleHtmlConverterBtn && htmlConverterSection) {
+        toggleHtmlConverterBtn.addEventListener('click', () => {
+            const isHidden = htmlConverterSection.style.display === 'none';
+            htmlConverterSection.style.display = isHidden ? 'block' : 'none';
+            // 버튼 상태 시각화: 열려있으면 파란색(btn-primary), 닫혀있으면 테두리(btn-outline)
+            toggleHtmlConverterBtn.classList.toggle('btn-primary', isHidden);
+            toggleHtmlConverterBtn.classList.toggle('btn-outline', !isHidden);
+        });
+    }
+
     if (convertBtn && converterInput) {
         convertBtn.addEventListener('click', () => {
             const sourceHtml = converterInput.value.trim();
             if (!sourceHtml) {
-                showToast('⚠ 변환할 HTML을 입력해 주세요.');
+                if (window._em && window._em.fn.showToast) window._em.fn.showToast('⚠ 변환할 HTML을 입력해 주세요.');
                 return;
             }
             if (window.htmlConverter) {
                 const result = window.htmlConverter.convert(sourceHtml);
                 if (window.tryCopyToClipboard) {
                     window.tryCopyToClipboard(result);
-                    showToast('✔ 변환 및 클립보드 복사 완료!');
+                    if (window._em && window._em.fn.showToast) window._em.fn.showToast('✔ 변환 및 클립보드 복사 완료!');
                 } else {
                     console.log(result);
-                    showToast('✔ 변환 완료 (콘솔 확인)');
+                    if (window._em && window._em.fn.showToast) window._em.fn.showToast('✔ 변환 완료 (콘솔 확인)');
+                }
+            }
+        });
+    }
+
+    if (findAndSelectBtn && converterInput) {
+        findAndSelectBtn.addEventListener('click', () => {
+            const sourceHtml = converterInput.value.trim();
+            if (!sourceHtml) {
+                if (window._em && window._em.fn.showToast) window._em.fn.showToast('⚠ HTML을 입력해 주세요.');
+                return;
+            }
+            if (!window.state || !window.state.allTweets) {
+                if (window._em && window._em.fn.showToast) window._em.fn.showToast('⚠ 트윗 데이터가 로드되지 않았습니다.');
+                return;
+            }
+
+            if (window.htmlConverter && window.htmlConverter.parseOldHtml) {
+                const parsedData = window.htmlConverter.parseOldHtml(sourceHtml);
+                const result = window.htmlConverter.findMatchesInState(parsedData, window.state.allTweets);
+                const matches = result.matches || [];
+                const failures = result.failures || [];
+
+                if (matches.length > 0) {
+                    let addedCount = 0;
+                    matches.forEach(t => {
+                        const id = String(t.id || t.id_str || "");
+                        if (id && !window.state.selectedIds.has(id)) {
+                            window.state.selectedIds.add(id);
+                            window.state.selectedOrder.push(id);
+                            addedCount++;
+                        }
+                    });
+
+                    if (addedCount > 0) {
+                        if (window.saveSelectedState) window.saveSelectedState();
+                        if (window.render) window.render(); // 전체 UI 갱신 (선택 패널 포함)
+                    }
+
+                    // 매칭 실패 보고
+                    if (failures.length > 0) {
+                        const failSnippets = failures.slice(0, 5).map(f => {
+                            const txt = (f.fullText || "").replace(/\s+/g, " ").trim();
+                            return `- "${txt.substring(0, 40)}${txt.length > 40 ? '...' : ''}"`;
+                        }).join('\n');
+
+                        let msg = `✔ ${addedCount}개의 트윗을 추가했지만, ${failures.length}개는 찾지 못했습니다.\n\n[찾지 못한 트윗 예시]\n${failSnippets}`;
+                        if (failures.length > 5) msg += `\n...외 ${failures.length - 5}개`;
+
+                        alert(msg);
+                    } else {
+                        if (window._em && window._em.fn.showToast) {
+                            if (addedCount > 0) window._em.fn.showToast(`✔ ${addedCount}개의 트윗을 선택 목록에 추가했습니다!`);
+                            else window._em.fn.showToast('ℹ 이미 모든 트윗이 선택되어 있습니다.');
+                        }
+                    }
+                } else {
+                    if (failures.length > 0) {
+                        const failSnippets = failures.slice(0, 3).map(f => {
+                            const txt = (f.fullText || "").replace(/\s+/g, " ").trim();
+                            return `- "${txt.substring(0, 40)}${txt.length > 40 ? '...' : ''}"`;
+                        }).join('\n');
+                        alert(`⚠ 일치하는 트윗을 하나도 찾지 못했습니다. (${failures.length}건)\n\n[입력 내용 예시]\n${failSnippets}`);
+                    } else {
+                        if (window._em && window._em.fn.showToast) window._em.fn.showToast('⚠ 일치하는 트윗을 찾지 못했습니다.');
+                    }
                 }
             }
         });
