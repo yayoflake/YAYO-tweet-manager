@@ -14,12 +14,51 @@ var fs = require('fs');
 var path = require('path');
 var exec = require('child_process').exec;
 
-var PORT = 7890;
+var PORT = 7890; // 기본 포트
 
 // 프로젝트 폴더 (server.js가 위치한 곳)
 var PROJECT_DIR = __dirname;
 // 상위 폴더 (트위터 백업 폴더: data/, assets/ 존재)
 var ARCHIVE_DIR = path.dirname(PROJECT_DIR);
+
+/**
+ * 간단한 문자열 해시 함수 (숫자 생성기)
+ */
+function hashString(str) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+        var char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // 32bit 정수로 변환
+    }
+    return Math.abs(hash);
+}
+
+/**
+ * account.js에서 계정명을 읽어 고유 포트 번호(8000~9999) 생성
+ */
+function getPortFromAccount() {
+    try {
+        var accountPath = path.join(ARCHIVE_DIR, 'data', 'account.js');
+        if (fs.existsSync(accountPath)) {
+            var content = fs.readFileSync(accountPath, 'utf8');
+            // 예: "username" : "YAYOFLAKE" 등에서 계정명 추출
+            var match = content.match(/"username"\s*:\s*"([^"]+)"/);
+            if (match && match[1]) {
+                var username = match[1];
+                var hash = hashString(username);
+                // 8000 ~ 9999 사이의 포트
+                var mappedPort = 8000 + (hash % 2000);
+                return mappedPort;
+            }
+        }
+    } catch (e) {
+        // 무시하고 기본 포트 반환
+    }
+    return PORT; // 계정 정보가 없으면 기본값
+}
+
+var targetPort = getPortFromAccount();
 
 // MIME 타입 매핑
 var MIME_TYPES = {
@@ -317,9 +356,13 @@ var server = http.createServer(function (req, res) {
 function startServer(port) {
     server.on('error', function (err) {
         if (err.code === 'EADDRINUSE') {
-            console.log('  ⚠️ 포트 ' + port + '가 이미 사용 중입니다. 빈 포트를 자동으로 찾습니다...');
-            // 포트를 0으로 지정하면 운영체제가 사용 가능한 임의의 포트를 자동 할당합니다.
-            server.listen(0);
+            console.log('  ⚠️ 이 계정의 로컬 서버(포트 ' + port + ')가 이미 실행 중입니다.');
+            console.log('  새로 서버를 열지 않고 기존에 띄워둔 포트로 브라우저를 엽니다...');
+            console.log('');
+            // 이미 사용 중이라면 해당 포트로 웹브라우저 띄우고 본 프로세스는 종료
+            exec('start http://localhost:' + port, function () {
+                process.exit(0);
+            });
         } else {
             console.error(err);
         }
@@ -331,7 +374,7 @@ function startServer(port) {
         console.log('  YAYO tweet manager 서버가 시작되었습니다.');
         console.log('  http://localhost:' + actualPort);
         console.log('');
-        console.log('  브라우저를 자동으로 엽니다...');
+        console.log('  포트는 계정명을 기반으로 고정 배치되어 저장된 초안을 유지합니다.');
         console.log('  이 검은 창을 닫으면 서버가 종료됩니다.');
         console.log('');
 
@@ -344,4 +387,4 @@ function startServer(port) {
     });
 }
 
-startServer(PORT);
+startServer(targetPort);
