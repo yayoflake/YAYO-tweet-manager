@@ -55,9 +55,10 @@ function generateTistoryHtml(tweets, tagMap, isLocalPreview = false, options = {
         linkIcon = '🔗';
     } else {
         const isGray = styleOption === 'styleB';
-        const rtUrl = isGray ? './yayo_icons/rt_B.svg' : './yayo_icons/rt_A.svg';
-        const favUrl = isGray ? './yayo_icons/fav_B.svg' : './yayo_icons/fav_A.svg';
-        const linkUrl = './yayo_icons/link.svg';
+        const baseUrl = 'https://raw.githubusercontent.com/yayoflake/YAYO-tweet-manager/main/yayo_icons/';
+        const rtUrl = isGray ? baseUrl + 'rt_B.svg' : baseUrl + 'rt_A.svg';
+        const favUrl = isGray ? baseUrl + 'fav_B.svg' : baseUrl + 'fav_A.svg';
+        const linkUrl = baseUrl + 'link.svg';
 
         rtIcon = `<img src="${rtUrl}" width="16" height="16" style="display:inline-block !important; vertical-align:middle; border:none; margin-right:4px;" />`;
         favIcon = `<img src="${favUrl}" width="16" height="16" style="display:inline-block !important; vertical-align:middle; border:none; margin-right:4px;" />`;
