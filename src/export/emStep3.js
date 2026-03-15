@@ -69,7 +69,10 @@ window._emSteps = {
             let currentChunkTweets = [];
             managerItems.forEach((item) => {
                 if (item.type === 'tweet') {
-                    currentChunkTweets.push(item.tweetId);
+                    // 뮤트된 트윗은 제외하고 청크 구성
+                    if (!_em.mutedIds.has(item.tweetId)) {
+                        currentChunkTweets.push(item.tweetId);
+                    }
                 } else if (item.type === 'divider') {
                     if (currentChunkTweets.length > 0) {
                         chunks.push([...currentChunkTweets]);
@@ -120,7 +123,17 @@ window._emSteps = {
             });
         }
         if (emStep3VideoPrefix) {
-            emStep3VideoPrefix.addEventListener('input', _updateStep3Outputs);
+            // 창을 닫았다 열어도 기억하도록 localStorage에서 로드
+            const savedPrefix = localStorage.getItem('yayo_video_prefix');
+            if (savedPrefix && !emStep3VideoPrefix.value) {
+                emStep3VideoPrefix.value = savedPrefix;
+            }
+
+            emStep3VideoPrefix.addEventListener('input', () => {
+                // 입력 시마다 localStorage에 저장
+                localStorage.setItem('yayo_video_prefix', emStep3VideoPrefix.value);
+                _updateStep3Outputs();
+            });
         }
 
         function getChunkTweets(chunkIdx) {

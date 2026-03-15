@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
             step: _em.step,
             managerItems: _em.managerItems,
             currentChunkIndex: _em.currentChunkIndex,
+            mutedIds: Array.from(_em.mutedIds || []),
             // 트윗 정합성 체크용 (현재 선택된 트윗 ID 목록)
             selectedOrder: window.state.selectedOrder || [],
             settings: {
@@ -74,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
             _em.step = draftData.step || 1;
             _em.managerItems = draftData.managerItems || [];
             _em.currentChunkIndex = draftData.currentChunkIndex || 0;
+            _em.mutedIds = new Set(draftData.mutedIds || []);
 
             // UI 설정값 복원
             if (draftData.settings) {

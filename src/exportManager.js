@@ -61,8 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 내부 상태
     let step = 1; // 현재 1단계
-    let managerItems = []; // { type: 'tweet', data: ... } or { type: 'divider', id: ... }
-    let currentChunkIndex = 0; // 선택된 청크 인덱스
+    let mutedIds = new Set(); // 뮤트된 트윗 ID (내보내기에서 제외)
     let emStep3PasteValues = {}; // 청크별 치환자 입력값 캐시
 
     const DEFAULT_SPLIT_COUNT = 40;
@@ -75,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     Object.defineProperty(window._em, 'step', { get: () => step, set: v => { step = v; }, configurable: true });
     Object.defineProperty(window._em, 'managerItems', { get: () => managerItems, set: v => { managerItems = v; }, configurable: true });
     Object.defineProperty(window._em, 'currentChunkIndex', { get: () => currentChunkIndex, set: v => { currentChunkIndex = v; }, configurable: true });
+    Object.defineProperty(window._em, 'mutedIds', { get: () => mutedIds, set: v => { mutedIds = v; }, configurable: true });
     Object.defineProperty(window._em, 'emStep3PasteValues', { get: () => emStep3PasteValues, set: v => { emStep3PasteValues = v; }, configurable: true });
 
     // ── 모듈 초기화 (순서 중요: emViewer → emChunkNav → emSteps) ────
@@ -161,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isRestoring) {
             step = 1;
             currentChunkIndex = 0; // 새로 열 때는 항상 첫 번째 청크(게시글 1)로 초기화
+            mutedIds.clear(); // 뮤트 내역 초기화
             initStep1();
         }
         updateStepUI();
